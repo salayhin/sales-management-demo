@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160411202540) do
+ActiveRecord::Schema.define(version: 20160411215537) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 255
@@ -46,6 +46,27 @@ ActiveRecord::Schema.define(version: 20160411202540) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "daily_sales_reports", force: :cascade do |t|
+    t.integer  "user_id",        limit: 4
+    t.integer  "sales_point_id", limit: 4
+    t.text     "comments",       limit: 65535
+    t.string   "invoice",        limit: 255
+    t.string   "other_image",    limit: 255
+    t.float    "lat",            limit: 24
+    t.float    "long",           limit: 24
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.date     "sales_date"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "district",   limit: 255
+    t.string   "division",   limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "products", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.text     "description", limit: 65535
@@ -53,6 +74,25 @@ ActiveRecord::Schema.define(version: 20160411202540) do
     t.boolean  "in_stock"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+  end
+
+  create_table "sales_points", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.integer  "location_id", limit: 4
+    t.float    "lat",         limit: 24
+    t.float    "long",        limit: 24
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "sales_targets", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.float    "target",     limit: 24
+    t.boolean  "is_active"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "user_id",    limit: 4
   end
 
   create_table "users", force: :cascade do |t|
@@ -79,5 +119,12 @@ ActiveRecord::Schema.define(version: 20160411202540) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "users_sales_points", force: :cascade do |t|
+    t.integer  "user_id",        limit: 4
+    t.integer  "sales_point_id", limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
 end
